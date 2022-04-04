@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class ShiroLoginFilter extends FormAuthenticationFilter {
-    public ShiroLoginFilter() {
-        System.out.println("\nShiroLoginFilter 初始化\n");
-    }
 
     /**
      * 在访问 controller 前判断是否登录，返回401，不进行重定向

@@ -1,8 +1,9 @@
 package com.huan.wxshop.generate;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ShoppingCart {
+public class ShoppingCart implements Serializable {
     private Long id;
 
     private Long userId;
@@ -16,6 +17,8 @@ public class ShoppingCart {
     private Date createdAt;
 
     private Date updatedAt;
+
+    private static final long serialVersionUID = 1L;
 
     public Long getId() {
         return id;

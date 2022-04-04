@@ -36,7 +36,6 @@ public class ShiroConfig implements WebMvcConfigurer {
     @Bean
     @DependsOn("shiroLoginFilter")
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager, ShiroLoginFilter shiroLoginFilter) {
-        System.out.println("\nshiroFilter 初始化\n");
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
@@ -55,16 +54,11 @@ public class ShiroConfig implements WebMvcConfigurer {
         return shiroFilterFactoryBean;
     }
 
-    //    @Bean
-//    public ShiroLoginFilter shiroLoginFilter(){
-//        System.out.println("\nShiroLoginFilter 初始化\n");
-//
-//        return new ShiroLoginFilter();
-//    }
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new UserLoginInterceptor(userService));
     }
+
 
     @Bean
     public SecurityManager securityManager(ShiroRealm realm) {

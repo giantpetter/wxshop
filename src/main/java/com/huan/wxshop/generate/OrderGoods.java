@@ -1,13 +1,16 @@
 package com.huan.wxshop.generate;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class OrderGoods {
+public class OrderGoods implements Serializable {
     private Long id;
 
     private Long goodsId;
 
     private BigDecimal number;
+
+    private static final long serialVersionUID = 1L;
 
     public Long getId() {
         return id;

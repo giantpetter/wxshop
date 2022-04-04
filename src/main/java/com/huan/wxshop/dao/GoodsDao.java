@@ -2,10 +2,13 @@ package com.huan.wxshop.dao;
 
 import com.huan.wxshop.entity.DataStatus;
 import com.huan.wxshop.generate.Goods;
+import com.huan.wxshop.generate.GoodsExample;
 import com.huan.wxshop.generate.GoodsMapper;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 @SuppressFBWarnings("EI_EXPOSE_REP2")
@@ -27,19 +30,32 @@ public class GoodsDao {
         return goodsMapper.selectByPrimaryKey(id);
     }
 
-    public Goods deleteGoodsById(Long goodsId) {
-        Goods goods = goodsMapper.selectByPrimaryKey(goodsId);
-        if (goods == null) {
-            throw new ResourceNotFoundException("Not Found");
-        }
-        goods.setStatus(DataStatus.DELETE_STATUS.getStatus());
-        goodsMapper.updateByPrimaryKey(goods);
-        return goods;
+    public int deleteGoodsById(Goods goods) {
+
+        return goodsMapper.updateByPrimaryKey(goods);
     }
 
-    public static class ResourceNotFoundException extends RuntimeException {
-        public ResourceNotFoundException(String message) {
-            super(message);
+    public Integer countGoodsByShopId(Integer shopId) {
+        GoodsExample goodsExample = new GoodsExample();
+        if (shopId == null) {
+            goodsExample.createCriteria().andStatusEqualTo(DataStatus.OK.getStatus());
+        } else {
+            goodsExample.createCriteria().andStatusEqualTo(DataStatus.OK.getStatus())
+                    .andShopIdEqualTo(shopId.longValue());
         }
+        return (int) goodsMapper.countByExample(goodsExample);
+    }
+
+    public List<Goods> selectGoodsByPage(Integer pageNum, Integer pageSize) {
+        GoodsExample goodsExample = new GoodsExample();
+        goodsExample.createCriteria().andStatusEqualTo(DataStatus.OK.getStatus());
+        goodsExample.setLimit(pageNum);
+        goodsExample.setOffset((pageSize - 1) * pageSize);
+        return goodsMapper.selectByExample(goodsExample);
+    }
+
+
+    public int updateGoods(Goods goods) {
+        return goodsMapper.updateByPrimaryKey(goods);
     }
 }

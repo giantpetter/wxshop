@@ -1,7 +1,9 @@
 package com.huan.wxshop.controller;
 
-import com.huan.wxshop.dao.GoodsDao;
+import com.huan.wxshop.entity.PageResponse;
 import com.huan.wxshop.entity.Response;
+import com.huan.wxshop.exceptions.NotAuthorizedForShopException;
+import com.huan.wxshop.exceptions.ResourceNotFoundException;
 import com.huan.wxshop.generate.Goods;
 import com.huan.wxshop.service.GoodsService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -33,10 +35,18 @@ public class GoodsController {
         try {
             response.setStatus(HttpServletResponse.SC_CREATED);
             return Response.of(goodsService.createGoods(goods));
-        } catch (GoodsService.NotAuthorizedForShopException e) {
+        } catch (NotAuthorizedForShopException e) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return Response.of(e.getMessage(), null);
         }
+    }
+
+    @GetMapping("/goods")
+    public @ResponseBody
+    PageResponse<Goods> getGoods(@RequestParam("pageNum") Integer pageNum,
+                                 @RequestParam("pageSize") Integer pageSize,
+                                 @RequestParam(name = "shopId", required = false) Integer shopId) {
+        return goodsService.getGoods(pageNum, pageSize, shopId);
     }
 
     private void clean(Goods goods) {
@@ -50,10 +60,24 @@ public class GoodsController {
         try {
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
             return Response.of(goodsService.deleteGoodsById(shopId));
-        } catch (GoodsService.NotAuthorizedForShopException e) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        } catch (NotAuthorizedForShopException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return Response.of(e.getMessage(), null);
-        } catch (GoodsDao.ResourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return Response.of(e.getMessage(), null);
+        }
+    }
+
+    @PatchMapping("/goods/{id}")
+    public Response<Goods> updateGoodsByID(@PathVariable("id") Long shopId, Goods goods, HttpServletResponse response) {
+        try {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return Response.of(goodsService.updateGoods(shopId, goods));
+        } catch (NotAuthorizedForShopException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return Response.of(e.getMessage(), null);
+        } catch (ResourceNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return Response.of(e.getMessage(), null);
         }

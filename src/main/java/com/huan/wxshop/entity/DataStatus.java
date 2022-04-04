@@ -1,7 +1,8 @@
 package com.huan.wxshop.entity;
 
 public enum DataStatus {
-    DELETE_STATUS("deleted");
+    DELETE_STATUS("deleted"),
+    OK("ok");
 
     private final String status;
 

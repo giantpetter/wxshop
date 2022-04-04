@@ -1,8 +1,9 @@
 package com.huan.wxshop.generate;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
+public class User implements Serializable {
     private Long id;
 
     private String name;
@@ -14,6 +15,8 @@ public class User {
     private Date createdAt;
 
     private Date updatedAt;
+
+    private static final long serialVersionUID = 1L;
 
     public Long getId() {
         return id;
