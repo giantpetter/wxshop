@@ -1,5 +1,6 @@
 package com.huan.wxshop.entity;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@SuppressFBWarnings({"EI_EXPOSE_REP2", "EI_EXPOSE_REP"})
 public class PageResponse<T> {
     private Integer pageNum;
     private Integer pageSize;

@@ -5,6 +5,7 @@ import com.huan.wxshop.entity.Response;
 import com.huan.wxshop.exceptions.HttpException;
 import com.huan.wxshop.generate.Shop;
 import com.huan.wxshop.service.ShopService;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/v1")
+@SuppressFBWarnings("EI_EXPOSE_REP2")
 public class ShopController {
     ShopService shopService;
 
@@ -38,7 +40,7 @@ public class ShopController {
     public Response<Shop> createShop(@RequestBody Shop shop, HttpServletResponse response) {
         try {
             Shop result = shopService.createShop(shop);
-            response.setStatus(HttpServletResponse.SC_OK);
+            response.setStatus(HttpServletResponse.SC_CREATED);
             return Response.of(result);
         } catch (HttpException e) {
             response.setStatus(e.getStatusCode());

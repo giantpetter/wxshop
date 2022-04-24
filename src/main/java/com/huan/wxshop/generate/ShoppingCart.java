@@ -10,6 +10,8 @@ public class ShoppingCart implements Serializable {
 
     private Long goodsId;
 
+    private Long shopId;
+
     private Integer number;
 
     private String status;
@@ -42,6 +44,14 @@ public class ShoppingCart implements Serializable {
 
     public void setGoodsId(Long goodsId) {
         this.goodsId = goodsId;
+    }
+
+    public Long getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
     }
 
     public Integer getNumber() {

@@ -5,6 +5,7 @@
     <id column="ID" jdbcType="BIGINT" property="id" />
     <result column="USER_ID" jdbcType="BIGINT" property="userId" />
     <result column="GOODS_ID" jdbcType="BIGINT" property="goodsId" />
+    <result column="Shop_ID" jdbcType="BIGINT" property="shopId" />
     <result column="NUMBER" jdbcType="INTEGER" property="number" />
     <result column="STATUS" jdbcType="VARCHAR" property="status" />
     <result column="CREATED_AT" jdbcType="TIMESTAMP" property="createdAt" />
@@ -69,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ID, USER_ID, GOODS_ID, NUMBER, STATUS, CREATED_AT, UPDATED_AT
+    ID, USER_ID, GOODS_ID, Shop_ID, NUMBER, STATUS, CREATED_AT, UPDATED_AT
   </sql>
   <select id="selectByExample" parameterType="com.huan.wxshop.generate.ShoppingCartExample" resultMap="BaseResultMap">
     select
@@ -113,12 +114,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into SHOPPING_CART (USER_ID, GOODS_ID, NUMBER, 
-      STATUS, CREATED_AT, UPDATED_AT
-      )
-    values (#{userId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{number,jdbcType=INTEGER}, 
-      #{status,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}
-      )
+    insert into SHOPPING_CART (USER_ID, GOODS_ID, Shop_ID, 
+      NUMBER, STATUS, CREATED_AT, 
+      UPDATED_AT)
+    values (#{userId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, 
+      #{number,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
+      #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.huan.wxshop.generate.ShoppingCart">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -131,6 +132,9 @@
       </if>
       <if test="goodsId != null">
         GOODS_ID,
+      </if>
+      <if test="shopId != null">
+        Shop_ID,
       </if>
       <if test="number != null">
         NUMBER,
@@ -151,6 +155,9 @@
       </if>
       <if test="goodsId != null">
         #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
       </if>
       <if test="number != null">
         #{number,jdbcType=INTEGER},
@@ -184,6 +191,9 @@
       <if test="record.goodsId != null">
         GOODS_ID = #{record.goodsId,jdbcType=BIGINT},
       </if>
+      <if test="record.shopId != null">
+        Shop_ID = #{record.shopId,jdbcType=BIGINT},
+      </if>
       <if test="record.number != null">
         NUMBER = #{record.number,jdbcType=INTEGER},
       </if>
@@ -206,6 +216,7 @@
     set ID = #{record.id,jdbcType=BIGINT},
       USER_ID = #{record.userId,jdbcType=BIGINT},
       GOODS_ID = #{record.goodsId,jdbcType=BIGINT},
+      Shop_ID = #{record.shopId,jdbcType=BIGINT},
       NUMBER = #{record.number,jdbcType=INTEGER},
       STATUS = #{record.status,jdbcType=VARCHAR},
       CREATED_AT = #{record.createdAt,jdbcType=TIMESTAMP},
@@ -222,6 +233,9 @@
       </if>
       <if test="goodsId != null">
         GOODS_ID = #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        Shop_ID = #{shopId,jdbcType=BIGINT},
       </if>
       <if test="number != null">
         NUMBER = #{number,jdbcType=INTEGER},
@@ -242,6 +256,7 @@
     update SHOPPING_CART
     set USER_ID = #{userId,jdbcType=BIGINT},
       GOODS_ID = #{goodsId,jdbcType=BIGINT},
+      Shop_ID = #{shopId,jdbcType=BIGINT},
       NUMBER = #{number,jdbcType=INTEGER},
       STATUS = #{status,jdbcType=VARCHAR},
       CREATED_AT = #{createdAt,jdbcType=TIMESTAMP},

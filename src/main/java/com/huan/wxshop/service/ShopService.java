@@ -5,6 +5,7 @@ import com.huan.wxshop.entity.PageResponse;
 import com.huan.wxshop.exceptions.HttpException;
 import com.huan.wxshop.generate.Shop;
 import com.huan.wxshop.generate.User;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@SuppressFBWarnings("EI_EXPOSE_REP2")
 public class ShopService {
     private final ShopDao shopDao;
 

@@ -5,6 +5,7 @@
     <id column="ID" jdbcType="BIGINT" property="id" />
     <result column="NAME" jdbcType="VARCHAR" property="name" />
     <result column="TEL" jdbcType="VARCHAR" property="tel" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
     <result column="AVATAR_URL" jdbcType="VARCHAR" property="avatarUrl" />
     <result column="CREATED_AT" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="UPDATED_AT" jdbcType="TIMESTAMP" property="updatedAt" />
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ID, NAME, TEL, AVATAR_URL, CREATED_AT, UPDATED_AT
+    ID, NAME, TEL, ADDRESS, AVATAR_URL, CREATED_AT, UPDATED_AT
   </sql>
   <select id="selectByExample" parameterType="com.huan.wxshop.generate.UserExample" resultMap="BaseResultMap">
     select
@@ -112,10 +113,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into USER (NAME, TEL, AVATAR_URL, 
-      CREATED_AT, UPDATED_AT)
-    values (#{name,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}, 
-      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
+    insert into USER (NAME, TEL, ADDRESS, 
+      AVATAR_URL, CREATED_AT, UPDATED_AT
+      )
+    values (#{name,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{avatarUrl,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.huan.wxshop.generate.User">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -128,6 +131,9 @@
       </if>
       <if test="tel != null">
         TEL,
+      </if>
+      <if test="address != null">
+        ADDRESS,
       </if>
       <if test="avatarUrl != null">
         AVATAR_URL,
@@ -145,6 +151,9 @@
       </if>
       <if test="tel != null">
         #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
       </if>
       <if test="avatarUrl != null">
         #{avatarUrl,jdbcType=VARCHAR},
@@ -175,6 +184,9 @@
       <if test="record.tel != null">
         TEL = #{record.tel,jdbcType=VARCHAR},
       </if>
+      <if test="record.address != null">
+        ADDRESS = #{record.address,jdbcType=VARCHAR},
+      </if>
       <if test="record.avatarUrl != null">
         AVATAR_URL = #{record.avatarUrl,jdbcType=VARCHAR},
       </if>
@@ -194,6 +206,7 @@
     set ID = #{record.id,jdbcType=BIGINT},
       NAME = #{record.name,jdbcType=VARCHAR},
       TEL = #{record.tel,jdbcType=VARCHAR},
+      ADDRESS = #{record.address,jdbcType=VARCHAR},
       AVATAR_URL = #{record.avatarUrl,jdbcType=VARCHAR},
       CREATED_AT = #{record.createdAt,jdbcType=TIMESTAMP},
       UPDATED_AT = #{record.updatedAt,jdbcType=TIMESTAMP}
@@ -209,6 +222,9 @@
       </if>
       <if test="tel != null">
         TEL = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=VARCHAR},
       </if>
       <if test="avatarUrl != null">
         AVATAR_URL = #{avatarUrl,jdbcType=VARCHAR},
@@ -226,6 +242,7 @@
     update USER
     set NAME = #{name,jdbcType=VARCHAR},
       TEL = #{tel,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
       AVATAR_URL = #{avatarUrl,jdbcType=VARCHAR},
       CREATED_AT = #{createdAt,jdbcType=TIMESTAMP},
       UPDATED_AT = #{updatedAt,jdbcType=TIMESTAMP}

@@ -2,10 +2,9 @@ package com.huan.wxshop.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.huan.wxshop.entity.LoginResponse;
+import com.huan.wxshop.generate.User;
 import org.apache.http.client.CookieStore;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.*;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -19,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 
 import java.io.IOException;
 import java.net.URI;
@@ -49,49 +49,75 @@ public abstract class AbstractIntegrationTest {
         flyway.migrate();
     }
 
-    public String loginAndGetCookie() throws URISyntaxException, IOException {
+    public UserLoginResponse loginAndGetCookie() throws URISyntaxException, IOException {
         CloseableHttpResponse response;
         //one
-        response = doHttpRequest("status", null, true);
+        response = doHttpRequest("status", null, HttpMethod.GET.toString());
         LoginResponse loginResponse = objectMapper.readValue(response.getEntity().getContent(), LoginResponse.class);
         Assertions.assertFalse(loginResponse.isLogin());
         response.close();
 
         //two
-        response = doHttpRequest("code", VALID_PARAMETER, false);
+        response = doHttpRequest("code", VALID_PARAMETER, HttpMethod.POST.toString());
         int responseCode = response.getStatusLine().getStatusCode();
         Assertions.assertEquals(HTTP_OK, responseCode);
         response.close();
 
         //three
-        response = doHttpRequest("login", VALID_PARAMETER_CODE, false);
+        response = doHttpRequest("login", VALID_PARAMETER_CODE, HttpMethod.POST.toString());
         List<Cookie> cookies = cookieStore.getCookies();
         Optional<Cookie> jsessionid = cookies.stream()
                 .filter(cookie -> cookie.getName().equals("JSESSIONID"))
                 .findFirst();
+        //four
+        response = doHttpRequest("status", VALID_PARAMETER_CODE, HttpMethod.GET.toString());
+        LoginResponse userInResponse = objectMapper.readValue(response.getEntity().getContent(), LoginResponse.class);
         response.close();
-        return jsessionid.get().getValue();
+        return new UserLoginResponse(jsessionid.get().getValue(), userInResponse.getUser());
     }
 
+    static class UserLoginResponse {
+        String cookie;
+        User user;
 
-    final ObjectMapper objectMapper = new ObjectMapper();
-    final CookieStore cookieStore = new BasicCookieStore();
-    CloseableHttpClient client = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
-    private final HttpPost post = new HttpPost();
-    private final HttpGet get = new HttpGet();
-
-    public CloseableHttpResponse doHttpRequest(String apiName, Object requestBody, boolean isGet) throws URISyntaxException, IOException {
-        URI url = new URI(getUrl(apiName));
-        if (isGet) {
-            get.setURI(url);
-            return client.execute(get);
-        } else {
-            StringEntity entity = new StringEntity(objectMapper.writeValueAsString(requestBody), ContentType.APPLICATION_JSON);
-            post.setURI(url);
-            post.setEntity(entity);
-            return client.execute(post);
+        UserLoginResponse(String cookie, User user) {
+            this.cookie = cookie;
+            this.user = user;
         }
     }
+
+    static final ObjectMapper objectMapper = new ObjectMapper();
+    final CookieStore cookieStore = new BasicCookieStore();
+    CloseableHttpClient client = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+
+    public CloseableHttpResponse doHttpRequest(String apiName, Object requestBody, String method) throws URISyntaxException, IOException {
+        URI url = new URI(getUrl(apiName));
+        StringEntity entity;
+        switch (method) {
+            case "GET":
+            case "get":
+                HttpGet get = new HttpGet(url);
+                return client.execute(get);
+            case "POST":
+            case "post":
+                HttpPost post = new HttpPost(url);
+                entity = new StringEntity(objectMapper.writeValueAsString(requestBody), ContentType.APPLICATION_JSON);
+                post.setEntity(entity);
+                return client.execute(post);
+            case "DELETE":
+            case "delete":
+                HttpDelete delete = new HttpDelete(url);
+                return client.execute(delete);
+            case "PATCH":
+            case "patch":
+            default:
+                HttpPatch patch = new HttpPatch(url);
+                entity = new StringEntity(objectMapper.writeValueAsString(requestBody), ContentType.APPLICATION_JSON);
+                patch.setEntity(entity);
+                return client.execute(patch);
+        }
+    }
+
 
     private String getUrl(String apiName) {
         return "http://localhost:" + environment.getProperty("local.server.port") + "/api/v1/" + apiName;

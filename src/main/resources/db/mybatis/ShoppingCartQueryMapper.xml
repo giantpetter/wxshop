@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huan.wxshop.dao.ShoppingCartQueryMapper">
+    <select id="countHowManyShopsInUserShoppingCart" resultType="int" parameterType="long">
+        SELECT COUNT(DISTINCT SHOP_ID)
+        FROM SHOPPING_CART s
+        WHERE s.USER_ID = #{userId}
+          AND s.STATUS = 'ok'
+    </select>
+
+    <!--    <select id="selectShoppingCartDataByUserId" parameterType="Map" resultType="">-->
+    <!--        SELECT s2.SHOP_ID, s2.GOODS_ID, g.NAME-->
+    <!--        FROM (-->
+    <!--                 SELECT DISTINCT s1.SHOP_ID-->
+    <!--                 FROM SHOPPING_CART s1-->
+    <!--                 WHERE USER_ID = #{userId}-->
+    <!--                 LIMIT #{offset}, #{limit}-->
+    <!--             ) t-->
+    <!--                 JOIN SHOPPING_CART s2 on s2.SHOP_ID = t.SHOP_ID-->
+    <!--                 JOIN GOODS g on g.ID = s2.GOODS_ID-->
+    <!--    </select>-->
+
+    <select id="selectShopIdsByPageAndUser" parameterType="Map" resultType="long">
+        SELECT DISTINCT s1.SHOP_ID
+        FROM SHOPPING_CART s1
+        WHERE USER_ID = #{userId}
+          AND `STATUS` = 'ok'
+        LIMIT #{offset}, #{limit}
+    </select>
+    <select id="selectShopById" parameterType="long" resultType="com.huan.wxshop.generate.Shop">
+        SELECT ID, `NAME`, DESCRIPTION, IMG_URL, OWNER_USER_ID, CREATED_AT, UPDATED_AT
+        FROM SHOP
+        WHERE ID = #{shopId}
+    </select>
+
+    <select id="selectGoodsByShopIdFromCart" parameterType="long" resultType="com.huan.wxshop.entity.ShoppingCartGoods">
+        SELECT g.ID          AS ID,
+               g.`NAME`      AS NAME,
+               g.SHOP_Id     AS SHOP_ID,
+               g.DESCRIPTION AS DESCRIPTION,
+               g.DETAILS     AS DETAILS,
+               g.IMG_URL     AS IMG_URL,
+               g.PRICE       AS PRICE,
+               s.NUMBER      AS NUMBER,
+               g.CREATED_AT  AS CREATED_AT,
+               g.UPDATED_AT  AS UPDATED_AT
+        FROM GOODS g
+                 INNER JOIN SHOPPING_CART s ON s.GOODS_ID = g.ID
+        WHERE s.SHOP_ID = #{shopId}
+          AND s.`STATUS` = "ok"
+          AND s.USER_ID = #{userId}
+    </select>
+</mapper>

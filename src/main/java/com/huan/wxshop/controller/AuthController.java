@@ -106,6 +106,7 @@ public class AuthController {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }
     }
+
     /**
      * @api {post} /logout 登出
      * @apiName Logout

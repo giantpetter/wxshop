@@ -10,6 +10,8 @@ public class User implements Serializable {
 
     private String tel;
 
+    private String address;
+
     private String avatarUrl;
 
     private Date createdAt;
@@ -40,6 +42,14 @@ public class User implements Serializable {
 
     public void setTel(String tel) {
         this.tel = tel == null ? null : tel.trim();
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
     }
 
     public String getAvatarUrl() {

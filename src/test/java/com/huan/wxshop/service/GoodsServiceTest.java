@@ -4,8 +4,7 @@ import com.huan.wxshop.dao.GoodsDao;
 import com.huan.wxshop.dao.ShopDao;
 import com.huan.wxshop.entity.DataStatus;
 import com.huan.wxshop.entity.PageResponse;
-import com.huan.wxshop.exceptions.NotAuthorizedForShopException;
-import com.huan.wxshop.exceptions.ResourceNotFoundException;
+import com.huan.wxshop.exceptions.HttpException;
 import com.huan.wxshop.generate.Goods;
 import com.huan.wxshop.generate.Shop;
 import com.huan.wxshop.generate.User;
@@ -18,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -64,27 +64,33 @@ public class GoodsServiceTest {
     public void createGoodsFailedIfUserIsNotOwner() {
         long ownerId = 2;
         when(shop.getOwnerUserId()).thenReturn(ownerId);
-        Assertions.assertThrows(NotAuthorizedForShopException.class, () -> {
+        HttpException assertException = Assertions.assertThrows(HttpException.class, () -> {
             goodsService.createGoods(goods);
         });
+        Assertions.assertEquals(assertException.getStatusCode(), HttpStatus.FORBIDDEN.value());
     }
 
     @Test
-    public void throwRouseNotFoundExceptionWhenDeleteGoodsById() {
+    public void throwResourceNotFoundExceptionWhenDeleteGoodsById() {
         long goodsId = 123;
-        when(shop.getOwnerUserId()).thenReturn(1L);
         when(goodsDao.selectGoodsById(goodsId)).thenReturn(null);
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+        HttpException assertException = Assertions.assertThrows(HttpException.class, () -> {
             goodsService.deleteGoodsById(goodsId);
         });
+        Assertions.assertEquals(assertException.getStatusCode(), HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     public void deleteGoodsByIdFailedIfUserIsNotOwner() {
+        Long goodsId = 123L, shopId = 1L;
         when(shop.getOwnerUserId()).thenReturn(2L);
-        Assertions.assertThrows(NotAuthorizedForShopException.class, () -> {
-            goodsService.deleteGoodsById(123L);
+        when(goodsDao.selectGoodsById(goodsId)).thenReturn(goods);
+        when(goods.getShopId()).thenReturn(shopId);
+        when(shopDao.selectShopById(shopId)).thenReturn(shop);
+        HttpException assertException = Assertions.assertThrows(HttpException.class, () -> {
+            goodsService.deleteGoodsById(goodsId);
         });
+        Assertions.assertEquals(assertException.getStatusCode(), HttpStatus.FORBIDDEN.value());
     }
 
     @Test
@@ -101,42 +107,19 @@ public class GoodsServiceTest {
         int pageNum = 5, pageSize = 10;
         when(goodsDao.countGoodsByShopId(any())).thenReturn(55);
         List<Goods> mockData = Mockito.mock(List.class);
-        when(goodsDao.selectGoodsByPage(pageNum, pageSize)).thenReturn(mockData);
+        when(goodsDao.selectGoodsByPage(pageNum, pageSize, null)).thenReturn(mockData);
 
-        PageResponse<Goods> result = goodsService.getGoods(pageNum, pageSize, any());
+        PageResponse<Goods> result = goodsService.getAllGoods(pageNum, pageSize, any());
         Assertions.assertEquals(result.getTotalPage(), 6);
         Assertions.assertEquals(result.getPageSize(), 10);
         Assertions.assertEquals(result.getPageNum(), 5);
         Assertions.assertEquals(result.getData(), mockData);
     }
 
-    @Test
-    public void updateGoodsSucceed() {
-        when(goodsDao.updateGoods(goods)).thenReturn(1);
-        when(shop.getOwnerUserId()).thenReturn(1L);
 
-//        verify(goods).setUpdatedAt(new Date());
-        Assertions.assertEquals(goods, goodsService.updateGoods(123L, goods));
-    }
 
-    @Test
-    public void updateGoodsFailedIfNotFound() {
-        when(goodsDao.updateGoods(goods)).thenReturn(0);
-        when(shop.getOwnerUserId()).thenReturn(1L);
-        Assertions.assertThrows(ResourceNotFoundException.class,
-                () -> {
-                    goodsService.updateGoods(123L, goods);
-                });
-    }
 
-    @Test
-    public void updateGoodsFailedIfNotOwner() {
-        when(shop.getOwnerUserId()).thenReturn(0L);
-        Assertions.assertThrows(NotAuthorizedForShopException.class,
-                () -> {
-                    goodsService.updateGoods(123L, goods);
-                });
-    }
+
 
 
 }

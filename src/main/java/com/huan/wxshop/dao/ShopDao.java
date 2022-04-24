@@ -33,14 +33,14 @@ public class ShopDao {
 
     public Shop insertShop(Shop shop) {
         shopMapper.insertSelective(shop);
-        return shop;
+        return selectShopById(shop.getId());
     }
 
     public Shop deleteShop(Shop shop) {
         shop.setStatus(DataStatus.DELETE_STATUS.getStatus());
         shop.setUpdatedAt(new Date());
         shopMapper.updateByPrimaryKeySelective(shop);
-        return shop;
+        return selectShopById(shop.getId());
     }
 
     public int selectCountShopsByUser(Long userId) {

@@ -35,22 +35,26 @@ public class GoodsDao {
         return goodsMapper.updateByPrimaryKey(goods);
     }
 
-    public Integer countGoodsByShopId(Integer shopId) {
+    public Integer countGoodsByShopId(Long shopId) {
         GoodsExample goodsExample = new GoodsExample();
         if (shopId == null) {
             goodsExample.createCriteria().andStatusEqualTo(DataStatus.OK.getStatus());
         } else {
             goodsExample.createCriteria().andStatusEqualTo(DataStatus.OK.getStatus())
-                    .andShopIdEqualTo(shopId.longValue());
+                    .andShopIdEqualTo(shopId);
         }
         return (int) goodsMapper.countByExample(goodsExample);
     }
 
-    public List<Goods> selectGoodsByPage(Integer pageNum, Integer pageSize) {
+    public List<Goods> selectGoodsByPage(Integer pageNum, Integer pageSize, Long shopId) {
         GoodsExample goodsExample = new GoodsExample();
-        goodsExample.createCriteria().andStatusEqualTo(DataStatus.OK.getStatus());
-        goodsExample.setLimit(pageNum);
-        goodsExample.setOffset((pageSize - 1) * pageSize);
+        if (shopId == null) {
+            goodsExample.createCriteria().andStatusEqualTo(DataStatus.OK.getStatus());
+        } else {
+            goodsExample.createCriteria().andStatusEqualTo(DataStatus.OK.getStatus()).andShopIdEqualTo(shopId);
+        }
+        goodsExample.setLimit(pageSize);
+        goodsExample.setOffset((pageNum - 1) * pageSize);
         return goodsMapper.selectByExample(goodsExample);
     }
 

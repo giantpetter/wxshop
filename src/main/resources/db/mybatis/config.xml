@@ -15,5 +15,6 @@
         <mapper resource="db/mybatis/ShopMapper.xml"/>
         <mapper resource="db/mybatis/ShoppingCartMapper.xml"/>
         <mapper resource="db/mybatis/OrderMapper.xml"/>
+        <mapper resource="db/mybatis/ShoppingCartQueryMapper.xml"/>
     </mappers>
 </configuration>

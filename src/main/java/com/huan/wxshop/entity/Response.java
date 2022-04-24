@@ -1,8 +1,10 @@
 package com.huan.wxshop.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 public class Response<T> {
     private T data;
     private String message;

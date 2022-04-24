@@ -4,8 +4,7 @@ import com.huan.wxshop.dao.GoodsDao;
 import com.huan.wxshop.dao.ShopDao;
 import com.huan.wxshop.entity.DataStatus;
 import com.huan.wxshop.entity.PageResponse;
-import com.huan.wxshop.exceptions.NotAuthorizedForShopException;
-import com.huan.wxshop.exceptions.ResourceNotFoundException;
+import com.huan.wxshop.exceptions.HttpException;
 import com.huan.wxshop.generate.Goods;
 import com.huan.wxshop.generate.Shop;
 import com.huan.wxshop.generate.User;
@@ -38,43 +37,51 @@ public class GoodsService {
         if (Objects.equals(shop.getOwnerUserId(), UserContext.getCurrentUser().getId())) {
             return goodsDao.insertGoods(goods);
         }
-        throw new NotAuthorizedForShopException("Unauthorized");
+        throw HttpException.forbidden("无法管理不属于自己的店铺！");
     }
 
     public Goods deleteGoodsById(Long goodsId) {
-        Shop shop = shopDao.selectShopById(goodsId);
+        Goods goods = goodsDao.selectGoodsById(goodsId);
+        if (goods == null) {
+            throw HttpException.notFound("商品未找到！");
+        }
+        Shop shop = shopDao.selectShopById(goods.getShopId());
         if (Objects.equals(shop.getOwnerUserId(), UserContext.getCurrentUser().getId())) {
-            Goods goods = goodsDao.selectGoodsById(goodsId);
-            if (goods == null) {
-                throw new ResourceNotFoundException("Not Found");
-            }
             goods.setStatus(DataStatus.DELETE_STATUS.getStatus());
             goodsDao.deleteGoodsById(goods);
             return goods;
         }
-        throw new NotAuthorizedForShopException("Unauthorized");
+        throw HttpException.forbidden("无法管理不属于自己的店铺！");
     }
 
-    public PageResponse<Goods> getGoods(Integer pageNum, Integer pageSize, Integer shopId) {
+    public PageResponse<Goods> getAllGoods(Integer pageNum, Integer pageSize, Long shopId) {
         int totalNumber = goodsDao.countGoodsByShopId(shopId);
         int totalPage = totalNumber % pageSize == 0 ? totalNumber / pageSize : totalNumber / pageSize + 1;
-        List<Goods> listGoods = goodsDao.selectGoodsByPage(pageNum, pageSize);
+        List<Goods> listGoods = goodsDao.selectGoodsByPage(pageNum, pageSize, shopId);
         return PageResponse.pagedData(pageNum, pageSize, totalPage, listGoods);
     }
 
-    public Goods updateGoods(Long shopId, Goods goods) {
+    public Goods updateGoods(long goodsId, Goods goods) {
         User currentUser = UserContext.getCurrentUser();
-        Shop shop = shopDao.selectShopById(shopId);
+        Goods oldGoods = goodsDao.selectGoodsById(goodsId);
+        if (oldGoods == null) {
+            throw HttpException.notFound("商品未找到！");
+        }
+        Shop shop = shopDao.selectShopById(goods.getShopId());
         if (Objects.equals(currentUser.getId(), shop.getOwnerUserId())) {
             goods.setUpdatedAt(new Date());
-            int affectedRow = goodsDao.updateGoods(goods);
-            if (affectedRow == 0) {
-                throw new ResourceNotFoundException("Not Found");
-            }
+            goodsDao.updateGoods(goods);
             return goods;
         }
-        throw new NotAuthorizedForShopException("Unauthorized");
+        throw HttpException.forbidden("无法管理不属于自己的店铺！");
     }
 
 
+    public Goods getGoodsById(long goodsId) {
+        Goods goods = goodsDao.selectGoodsById(goodsId);
+        if (goods == null) {
+            throw HttpException.notFound("商品未找到！");
+        }
+        return goods;
+    }
 }
