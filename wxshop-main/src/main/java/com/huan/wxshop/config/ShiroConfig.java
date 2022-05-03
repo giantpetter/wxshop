@@ -43,6 +43,7 @@ public class ShiroConfig implements WebMvcConfigurer {
         pattern.put("/api/v1/code", "anon");
         pattern.put("/api/v1/login", "anon");
         pattern.put("/api/v1/status", "anon");
+        pattern.put("/api/v1/test/**", "anon");
         pattern.put("/api/v1/logout", "anon");
         pattern.put("/**", "authc");
 

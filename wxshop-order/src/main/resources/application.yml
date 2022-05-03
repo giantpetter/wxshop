@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: wxshop-orderservice
+
+dubbo:
+  scan:
+    base-packages: com.huan.order.service
+  # Dubbo Protocol
+  protocol:
+    name: dubbo
+    ## Random port
+    port: -1
+  ## Dubbo Registry
+  registry:
+    address: zookeeper://127.0.0.1:2181
+
+server:
+  port: 8081
+
+wxshop:
+  orderservice:
+    version: 1.0.1

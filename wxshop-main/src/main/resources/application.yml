@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: wxshop
+  datasource:
+    url: jdbc:mysql://localhost:3307/wxshop?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    driverClassName: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  config-location: classpath:db/mybatis/config.xml
+
+dubbo:
+  ## Dubbo Registry
+  registry:
+    address: zookeeper://127.0.0.1:2181
+
+wxshop:
+  orderservice:
+    version: 1.0.1
