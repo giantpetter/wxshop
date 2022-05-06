@@ -2,7 +2,6 @@ package com.huan.wxshop.controller;
 
 import com.huan.wxshop.entity.PageResponse;
 import com.huan.wxshop.entity.Response;
-import com.huan.wxshop.exceptions.HttpException;
 import com.huan.wxshop.generate.Shop;
 import com.huan.wxshop.service.ShopService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -24,65 +23,35 @@ public class ShopController {
 
     @PatchMapping("/shop/{id}")
     public Response<Shop> modifyShop(@PathVariable("id") Long shopId,
-                                     @RequestBody Shop shop, HttpServletResponse response) {
-        try {
-            shop.setId(shopId);
-            Shop data = shopService.updateShopById(shop);
-            response.setStatus(HttpServletResponse.SC_OK);
-            return Response.of(data);
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return Response.of(e.getMessage(), null);
-        }
+                                     @RequestBody Shop shop) {
+        shop.setId(shopId);
+        Shop data = shopService.updateShopById(shop);
+        return Response.of(data);
     }
 
     @PostMapping("/shop")
     public Response<Shop> createShop(@RequestBody Shop shop, HttpServletResponse response) {
-        try {
-            Shop result = shopService.createShop(shop);
-            response.setStatus(HttpServletResponse.SC_CREATED);
-            return Response.of(result);
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return Response.of(e.getMessage(), null);
-        }
+        Shop result = shopService.createShop(shop);
+        response.setStatus(HttpServletResponse.SC_CREATED);
+        return Response.of(result);
     }
 
     @DeleteMapping("/shop/{id}")
-    public Response<Shop> deleteShop(@PathVariable("id") Long shopId, HttpServletResponse response) {
-        try {
-            Shop data = shopService.deleteShopById(shopId);
-            response.setStatus(HttpServletResponse.SC_OK);
-            return Response.of(data);
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return Response.of(e.getMessage(), null);
-        }
+    public Response<Shop> deleteShop(@PathVariable("id") Long shopId) {
+        Shop data = shopService.deleteShopById(shopId);
+        return Response.of(data);
     }
 
     @GetMapping("/shop")
     public PageResponse<Shop> getPagedShopsByUserId(@RequestParam("pageNum") int pageNum,
-                                                    @RequestParam("pageSize") int pageSize,
-                                                    HttpServletResponse response) {
-        try {
-            response.setStatus(HttpServletResponse.SC_OK);
-            return shopService.getShopsByPage(pageNum, pageSize);
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return PageResponse.of(e.getMessage());
-        }
+                                                    @RequestParam("pageSize") int pageSize) {
+        return shopService.getShopsByPage(pageNum, pageSize);
     }
 
     @GetMapping("/shop/{id}")
-    public Response<Shop> getShopByShopId(@PathVariable("id") Long shopId, HttpServletResponse response) {
-        try {
-            Shop data = shopService.getShopByShopId(shopId);
-            response.setStatus(HttpServletResponse.SC_OK);
-            return Response.of(data);
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return Response.of(e.getMessage(), null);
-        }
+    public Response<Shop> getShopByShopId(@PathVariable("id") Long shopId) {
+        Shop data = shopService.getShopByShopId(shopId);
+        return Response.of(data);
     }
 
 }

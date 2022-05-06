@@ -1,4 +1,4 @@
-package com.huan.wxshop.generate;
+package com.huan.api.generate;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

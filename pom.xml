@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.huan</groupId>
     <artifactId>wxshop-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>pom</packaging>
     <name>wxshop-parent</name>
     <description>wxshop-parent</description>
@@ -22,20 +22,20 @@
     </modules>
 
 
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>aliyun</id>-->
-<!--            <name>aliyun maven</name>-->
-<!--            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>-->
-<!--        </repository>-->
-<!--    </repositories>-->
-<!--    <pluginRepositories>-->
-<!--        <pluginRepository>-->
-<!--            <id>aliyun</id>-->
-<!--            <name>aliyun maven</name>-->
-<!--            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>-->
-<!--        </pluginRepository>-->
-<!--    </pluginRepositories>-->
+    <!--    <repositories>-->
+    <!--        <repository>-->
+    <!--            <id>aliyun</id>-->
+    <!--            <name>aliyun maven</name>-->
+    <!--            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>-->
+    <!--        </repository>-->
+    <!--    </repositories>-->
+    <!--    <pluginRepositories>-->
+    <!--        <pluginRepository>-->
+    <!--            <id>aliyun</id>-->
+    <!--            <name>aliyun maven</name>-->
+    <!--            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>-->
+    <!--        </pluginRepository>-->
+    <!--    </pluginRepositories>-->
 
 
     <properties>
@@ -60,6 +60,11 @@
                         <artifactId>slf4j-log4j12</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>2.2.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

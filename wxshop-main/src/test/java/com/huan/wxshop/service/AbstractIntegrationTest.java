@@ -51,6 +51,7 @@ public abstract class AbstractIntegrationTest {
 
     public UserLoginResponse loginAndGetCookie() throws URISyntaxException, IOException {
         CloseableHttpResponse response;
+        cookieStore.clear();
         //one
         response = doHttpRequest("status", null, HttpMethod.GET.toString());
         LoginResponse loginResponse = objectMapper.readValue(response.getEntity().getContent(), LoginResponse.class);
@@ -69,6 +70,7 @@ public abstract class AbstractIntegrationTest {
         Optional<Cookie> jsessionid = cookies.stream()
                 .filter(cookie -> cookie.getName().equals("JSESSIONID"))
                 .findFirst();
+        response.close();
         //four
         response = doHttpRequest("status", VALID_PARAMETER_CODE, HttpMethod.GET.toString());
         LoginResponse userInResponse = objectMapper.readValue(response.getEntity().getContent(), LoginResponse.class);

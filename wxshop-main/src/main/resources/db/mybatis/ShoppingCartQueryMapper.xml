@@ -35,7 +35,7 @@
         WHERE ID = #{shopId}
     </select>
 
-    <select id="selectGoodsByShopIdFromCart" parameterType="long" resultType="com.huan.wxshop.entity.ShoppingCartGoods">
+    <select id="selectGoodsByShopIdFromCart" parameterType="long" resultType="com.huan.wxshop.entity.GoodsWithNumber">
         SELECT g.ID          AS ID,
                g.`NAME`      AS NAME,
                g.SHOP_Id     AS SHOP_ID,

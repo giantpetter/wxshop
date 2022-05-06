@@ -2,7 +2,7 @@ package com.huan.wxshop.service;
 
 import com.huan.wxshop.dao.GoodsDao;
 import com.huan.wxshop.dao.ShopDao;
-import com.huan.wxshop.entity.DataStatus;
+import com.huan.api.entity.DataStatus;
 import com.huan.wxshop.entity.PageResponse;
 import com.huan.wxshop.exceptions.HttpException;
 import com.huan.wxshop.generate.Goods;

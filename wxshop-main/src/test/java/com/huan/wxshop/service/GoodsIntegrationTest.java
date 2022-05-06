@@ -1,8 +1,8 @@
 package com.huan.wxshop.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.huan.api.entity.DataStatus;
 import com.huan.wxshop.WxshopApplication;
-import com.huan.wxshop.entity.DataStatus;
 import com.huan.wxshop.entity.PageResponse;
 import com.huan.wxshop.entity.Response;
 import com.huan.wxshop.generate.Goods;
@@ -11,13 +11,11 @@ import com.huan.wxshop.generate.Shop;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -28,7 +26,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = WxshopApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {"spring.config.location=classpath:application-test.yml"})
 public class GoodsIntegrationTest extends AbstractIntegrationTest {

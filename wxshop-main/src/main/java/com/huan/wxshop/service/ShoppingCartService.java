@@ -1,11 +1,11 @@
 package com.huan.wxshop.service;
 
+import com.huan.api.entity.DataStatus;
 import com.huan.wxshop.controller.ShoppingCartController;
 import com.huan.wxshop.dao.ShoppingCartQueryMapper;
-import com.huan.wxshop.entity.DataStatus;
+import com.huan.wxshop.entity.GoodsWithNumber;
 import com.huan.wxshop.entity.PageResponse;
 import com.huan.wxshop.entity.ShoppingCartData;
-import com.huan.wxshop.entity.ShoppingCartGoods;
 import com.huan.wxshop.exceptions.HttpException;
 import com.huan.wxshop.generate.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -21,20 +21,20 @@ import java.util.stream.Collectors;
 @Service
 @SuppressFBWarnings({"EI_EXPOSE_REP2", "EI_EXPOSE_REP"})
 public class ShoppingCartService {
-    ShoppingCartQueryMapper shoppingCartQueryMapper;
-    ShoppingCartMapper shoppingCartMapper;
-    GoodsMapper goodsMapper;
-    SqlSessionFactory sqlSessionFactory;
+    private final ShoppingCartQueryMapper shoppingCartQueryMapper;
+    private final ShoppingCartMapper shoppingCartMapper;
+    private final GoodsService goodsService;
+    private final SqlSessionFactory sqlSessionFactory;
 
     @Autowired
     public ShoppingCartService(ShoppingCartQueryMapper shoppingCartQueryMapper,
                                ShoppingCartMapper shoppingCartMapper,
-                               GoodsMapper goodsMapper,
-                               SqlSessionFactory sqlSessionFactory) {
+                               SqlSessionFactory sqlSessionFactory,
+                               GoodsService goodsService) {
         this.shoppingCartQueryMapper = shoppingCartQueryMapper;
         this.shoppingCartMapper = shoppingCartMapper;
-        this.goodsMapper = goodsMapper;
         this.sqlSessionFactory = sqlSessionFactory;
+        this.goodsService = goodsService;
     }
 
     public PageResponse<ShoppingCartData> getShoppingCardOfUser(int pageNum, int pageSize) {
@@ -60,14 +60,11 @@ public class ShoppingCartService {
                 .stream()
                 .map(ShoppingCartController.AddToShoppingCartItem::getGoodsId)
                 .collect(Collectors.toList());
-        GoodsExample goodsExample = new GoodsExample();
-        goodsExample.createCriteria().andIdIn(goodsId).andStatusEqualTo(DataStatus.OK.getStatus());
-        List<Goods> goods = goodsMapper.selectByExample(goodsExample);
 
-        if (goods.stream().map(Goods::getShopId).collect(Collectors.toSet()).size() != 1) {
+        Map<Long, Goods> idToGoodsMap = goodsService.getIdToGoodsMap(goodsId);
+        if (idToGoodsMap.values().stream().map(Goods::getShopId).collect(Collectors.toSet()).size() != 1) {
             throw HttpException.badRequest("商品 ID 非法:" + goodsId);
         }
-        Map<Long, Goods> idToGoodsMap = goods.stream().collect(Collectors.toMap(Goods::getId, x -> x));
         List<ShoppingCart> shoppingCartRows = request.getGoods()
                 .stream()
                 .map(item -> toShoppingCartRow(item, idToGoodsMap))
@@ -80,7 +77,7 @@ public class ShoppingCartService {
             sqlSession.commit();
         }
 
-        long shopId = goods.get(0).getShopId();
+        long shopId = new ArrayList<>(idToGoodsMap.values()).get(0).getShopId();
         return getLatestShoppingCartData(shopId, userId);
     }
 
@@ -120,7 +117,7 @@ public class ShoppingCartService {
     private ShoppingCartData getLatestShoppingCartData(long shopId, long userId) {
         ShoppingCartData data = new ShoppingCartData();
         Shop shop = shoppingCartQueryMapper.selectShopById(shopId);
-        List<ShoppingCartGoods> goods = shoppingCartQueryMapper.selectGoodsByShopIdFromCart(shopId, userId);
+        List<GoodsWithNumber> goods = shoppingCartQueryMapper.selectGoodsByShopIdFromCart(shopId, userId);
         data.setGoods(goods);
         data.setShop(shop);
         return data;

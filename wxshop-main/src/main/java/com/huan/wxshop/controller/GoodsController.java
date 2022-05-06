@@ -2,7 +2,6 @@ package com.huan.wxshop.controller;
 
 import com.huan.wxshop.entity.PageResponse;
 import com.huan.wxshop.entity.Response;
-import com.huan.wxshop.exceptions.HttpException;
 import com.huan.wxshop.generate.Goods;
 import com.huan.wxshop.service.GoodsService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -31,13 +30,8 @@ public class GoodsController {
     @PostMapping("/goods")
     public Response<Goods> createGoods(@RequestBody Goods goods, HttpServletResponse response) {
         clean(goods);
-        try {
-            response.setStatus(HttpServletResponse.SC_CREATED);
-            return Response.of(goodsService.createGoods(goods));
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return Response.of(e.getMessage(), null);
-        }
+        response.setStatus(HttpServletResponse.SC_CREATED);
+        return Response.of(goodsService.createGoods(goods));
     }
 
     @GetMapping("/goods")
@@ -48,14 +42,8 @@ public class GoodsController {
     }
 
     @GetMapping("/goods/{goodsId}")
-    public Response<Goods> getGoodsById(@PathVariable("goodsId") Long goodsId,
-                                        HttpServletResponse response) {
-        try {
-            return Response.of(goodsService.getGoodsById(goodsId));
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return Response.of(e.getMessage(), null);
-        }
+    public Response<Goods> getGoodsById(@PathVariable("goodsId") Long goodsId) {
+        return Response.of(goodsService.getGoodsById(goodsId));
     }
 
 
@@ -66,26 +54,14 @@ public class GoodsController {
     }
 
     @DeleteMapping("/goods/{id}")
-    public Response<Goods> deleteGoods(@PathVariable("id") Long shopId, HttpServletResponse response) {
-        try {
-            return Response.of(goodsService.deleteGoodsById(shopId));
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return Response.of(e.getMessage(), null);
-        }
+    public Response<Goods> deleteGoods(@PathVariable("id") Long shopId) {
+        return Response.of(goodsService.deleteGoodsById(shopId));
     }
 
     @PatchMapping("/goods/{id}")
     public Response<Goods> updateGoodsByID(@PathVariable("id") Long shopId,
-                                           @RequestBody Goods goods,
-                                           HttpServletResponse response) {
-        try {
-            response.setStatus(HttpServletResponse.SC_OK);
-            return Response.of(goodsService.updateGoods(shopId, goods));
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return Response.of(e.getMessage(), null);
-        }
+                                           @RequestBody Goods goods) {
+        return Response.of(goodsService.updateGoods(shopId, goods));
     }
 
 

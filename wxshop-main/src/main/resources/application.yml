@@ -18,3 +18,4 @@ dubbo:
 wxshop:
   orderservice:
     version: 1.0.1
+    url: ""

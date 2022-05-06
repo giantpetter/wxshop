@@ -3,7 +3,6 @@ package com.huan.wxshop.controller;
 import com.huan.wxshop.entity.PageResponse;
 import com.huan.wxshop.entity.Response;
 import com.huan.wxshop.entity.ShoppingCartData;
-import com.huan.wxshop.exceptions.HttpException;
 import com.huan.wxshop.service.ShoppingCartService;
 import com.huan.wxshop.service.UserContext;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -12,7 +11,6 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -35,26 +33,14 @@ public class ShoppingCartController {
     }
 
     @PostMapping("/shoppingCart")
-    public Response<ShoppingCartData> addToShoppingCart(@RequestBody AddToShoppingCartRequest requestBody,
-                                                        HttpServletResponse response) {
-        try {
-            long userId = UserContext.getCurrentUser().getId();
-            return Response.of(shoppingCartService.addToShoppingCart(requestBody, userId));
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return Response.of(e.getMessage(), null);
-        }
+    public Response<ShoppingCartData> addToShoppingCart(@RequestBody AddToShoppingCartRequest requestBody) {
+        long userId = UserContext.getCurrentUser().getId();
+        return Response.of(shoppingCartService.addToShoppingCart(requestBody, userId));
     }
 
     @DeleteMapping("/shoppingCart/{goodsId}")
-    public Response<ShoppingCartData> deleteShoppingCartByGoodsId(@PathVariable("goodsId") Long goodsId,
-                                                                  HttpServletResponse response) {
-        try {
-            return Response.of(shoppingCartService.deleteShoppingCartByGoodsId(goodsId));
-        } catch (HttpException e) {
-            response.setStatus(e.getStatusCode());
-            return Response.of(e.getMessage(), null);
-        }
+    public Response<ShoppingCartData> deleteShoppingCartByGoodsId(@PathVariable("goodsId") Long goodsId) {
+        return Response.of(shoppingCartService.deleteShoppingCartByGoodsId(goodsId));
     }
 
     @Setter

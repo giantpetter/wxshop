@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.huan.wxshop.generate.OrderMapper">
-  <resultMap id="BaseResultMap" type="com.huan.wxshop.generate.Order">
+<mapper namespace="com.huan.order.mapper.OrderMapper">
+  <resultMap id="BaseResultMap" type="com.huan.api.generate.Order">
     <id column="ID" jdbcType="BIGINT" property="id" />
     <result column="USER_ID" jdbcType="BIGINT" property="userId" />
     <result column="TOTAL_PRICE" jdbcType="DECIMAL" property="totalPrice" />
@@ -74,7 +74,7 @@
     ID, USER_ID, TOTAL_PRICE, ADDRESS, EXPRESS_COMPANY, EXPRESS_ID, STATUS, CREATED_AT, 
     UPDATED_AT
   </sql>
-  <select id="selectByExample" parameterType="com.huan.wxshop.generate.OrderExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.huan.api.generate.OrderExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -106,13 +106,13 @@
     delete from ORDER
     where ID = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.huan.wxshop.generate.OrderExample">
+  <delete id="deleteByExample" parameterType="com.huan.api.generate.OrderExample">
     delete from ORDER
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.huan.wxshop.generate.Order">
+  <insert id="insert" parameterType="com.huan.api.generate.Order">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -123,7 +123,7 @@
       #{expressCompany,jdbcType=VARCHAR}, #{expressId,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.huan.wxshop.generate.Order">
+  <insert id="insertSelective" parameterType="com.huan.api.generate.Order">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -181,7 +181,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.huan.wxshop.generate.OrderExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.huan.api.generate.OrderExample" resultType="java.lang.Long">
     select count(*) from ORDER
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -237,7 +237,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.huan.wxshop.generate.Order">
+  <update id="updateByPrimaryKeySelective" parameterType="com.huan.api.generate.Order">
     update ORDER
     <set>
       <if test="userId != null">
@@ -267,7 +267,7 @@
     </set>
     where ID = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.huan.wxshop.generate.Order">
+  <update id="updateByPrimaryKey" parameterType="com.huan.api.generate.Order">
     update ORDER
     set USER_ID = #{userId,jdbcType=BIGINT},
       TOTAL_PRICE = #{totalPrice,jdbcType=DECIMAL},

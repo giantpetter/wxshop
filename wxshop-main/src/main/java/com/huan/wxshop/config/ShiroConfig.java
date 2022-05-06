@@ -15,10 +15,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
+import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -75,6 +77,11 @@ public class ShiroConfig implements WebMvcConfigurer {
     public ShiroRealm shiroRealm(VerificationCheckCode verificationCheckCode) {
 
         return new ShiroRealm(verificationCheckCode);
+    }
+
+    @Bean
+    public DataSourceTransactionManager dataSourceTransactionManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
     }
 
 

@@ -20,7 +20,6 @@ import static java.net.HttpURLConnection.*;
 @TestPropertySource(properties = {"spring.config.location=classpath:application-test.yml"})
 public class AuthIntegrationTest extends AbstractIntegrationTest {
 
-
     /**
      * 1.第一次登录 /api/status, 处于为登出状态
      * 2.发送验证码 /api/code

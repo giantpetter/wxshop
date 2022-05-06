@@ -1,6 +1,6 @@
 package com.huan.wxshop.dao;
 
-import com.huan.wxshop.entity.DataStatus;
+import com.huan.api.entity.DataStatus;
 import com.huan.wxshop.generate.Goods;
 import com.huan.wxshop.generate.GoodsExample;
 import com.huan.wxshop.generate.GoodsMapper;

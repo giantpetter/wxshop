@@ -33,4 +33,8 @@ public class HttpException extends RuntimeException {
         super(message);
         this.statusCode = statusCode;
     }
+
+    public static HttpException gone(String msg) {
+        return new HttpException(msg, HttpStatus.GONE.value());
+    }
 }

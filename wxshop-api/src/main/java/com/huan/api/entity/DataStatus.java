@@ -1,8 +1,15 @@
-package com.huan.wxshop.entity;
+package com.huan.api.entity;
 
 public enum DataStatus {
     DELETE_STATUS("deleted"),
-    OK("ok");
+    OK("ok"),
+//    only for order
+    PENDING("pending"),
+    PAID("paid"),
+    DELIVERED("delivered"),
+    RECEIVED("received");
+
+
 
     private final String status;
 

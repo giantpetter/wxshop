@@ -22,16 +22,16 @@
             <property name="forceBigDecimals" value="true"/>
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="com.huan.wxshop.generate" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.huan.wxshop.generate" targetProject="wxshop-main/src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="db.mybatis" targetProject="src/main/resources">
+        <sqlMapGenerator targetPackage="db.mybatis" targetProject="wxshop-main/src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.huan.wxshop.generate" targetProject="src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.huan.wxshop.generate" targetProject="wxshop-main/src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
@@ -44,14 +44,6 @@
             <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
         </table>
         <table schema="wxshop" tableName="SHOP" domainObjectName="Shop">
-            <property name="useActualColumnNames" value="false"/>
-            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
-        </table>
-        <table schema="wxshop" tableName="ORDER" domainObjectName="Order">
-            <property name="useActualColumnNames" value="false"/>
-            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
-        </table>
-        <table schema="wxshop" tableName="ORDER_GOODS" domainObjectName="OrderGoods">
             <property name="useActualColumnNames" value="false"/>
             <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
         </table>

@@ -1,6 +1,6 @@
 package com.huan.wxshop.dao;
 
-import com.huan.wxshop.entity.ShoppingCartGoods;
+import com.huan.wxshop.entity.GoodsWithNumber;
 import com.huan.wxshop.generate.Shop;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -20,6 +20,6 @@ public interface ShoppingCartQueryMapper {
 
     Shop selectShopById(@Param("shopId") long shopId);
 
-    List<ShoppingCartGoods> selectGoodsByShopIdFromCart(@Param("shopId") long shopId,
-                                                        @Param("userId") long userId);
+    List<GoodsWithNumber> selectGoodsByShopIdFromCart(@Param("shopId") long shopId,
+                                                      @Param("userId") long userId);
 }

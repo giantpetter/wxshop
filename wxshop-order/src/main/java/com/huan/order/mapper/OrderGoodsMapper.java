@@ -1,5 +1,7 @@
-package com.huan.wxshop.generate;
+package com.huan.order.mapper;
 
+import com.huan.api.generate.OrderGoods;
+import com.huan.api.generate.OrderGoodsExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

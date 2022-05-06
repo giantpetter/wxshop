@@ -1,5 +1,7 @@
 package com.huan.wxshop.generate;
 
+import com.huan.wxshop.generate.User;
+import com.huan.wxshop.generate.UserExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

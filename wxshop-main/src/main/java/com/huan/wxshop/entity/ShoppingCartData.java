@@ -12,6 +12,6 @@ import java.util.List;
 @SuppressFBWarnings({"EI_EXPOSE_REP2", "EI_EXPOSE_REP"})
 public class ShoppingCartData {
     private Shop shop;
-    private List<ShoppingCartGoods> goods;
+    private List<GoodsWithNumber> goods;
 
 }
