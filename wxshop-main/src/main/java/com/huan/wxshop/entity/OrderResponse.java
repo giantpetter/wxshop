@@ -16,6 +16,12 @@ public class OrderResponse extends Order {
     private List<GoodsWithNumber> goods;
 
     public OrderResponse(Order order) {
+        this.setUserId(order.getUserId());
+        this.setTotalPrice(order.getTotalPrice());
+        this.setUpdatedAt(order.getUpdatedAt());
+        this.setExpressId(order.getExpressId());
+        this.setExpressCompany(order.getExpressCompany());
+        this.setCreatedAt(order.getCreatedAt());
         this.setId(order.getId());
         this.setAddress(order.getAddress());
         this.setStatus(order.getStatus());

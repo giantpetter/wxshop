@@ -8,5 +8,6 @@ import java.util.List;
 @Setter
 @Getter
 public class OrderInfo {
-    List<GoodsInfo> goods;
+    private long orderId;
+    private List<GoodsInfo> goods;
 }

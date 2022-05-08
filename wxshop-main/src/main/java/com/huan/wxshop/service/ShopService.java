@@ -1,8 +1,8 @@
 package com.huan.wxshop.service;
 
 import com.huan.wxshop.dao.ShopDao;
-import com.huan.wxshop.entity.PageResponse;
-import com.huan.wxshop.exceptions.HttpException;
+import com.huan.api.entity.PageResponse;
+import com.huan.api.exceptions.HttpException;
 import com.huan.wxshop.generate.Shop;
 import com.huan.wxshop.generate.User;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;

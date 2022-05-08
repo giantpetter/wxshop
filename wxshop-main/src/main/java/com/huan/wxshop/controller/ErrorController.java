@@ -1,7 +1,7 @@
 package com.huan.wxshop.controller;
 
 import com.huan.wxshop.entity.Response;
-import com.huan.wxshop.exceptions.HttpException;
+import com.huan.api.exceptions.HttpException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

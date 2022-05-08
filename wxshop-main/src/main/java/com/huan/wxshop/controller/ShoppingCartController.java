@@ -1,6 +1,6 @@
 package com.huan.wxshop.controller;
 
-import com.huan.wxshop.entity.PageResponse;
+import com.huan.api.entity.PageResponse;
 import com.huan.wxshop.entity.Response;
 import com.huan.wxshop.entity.ShoppingCartData;
 import com.huan.wxshop.service.ShoppingCartService;

@@ -1,14 +1,12 @@
 package com.huan.wxshop.service;
 
-import com.huan.api.entity.DataStatus;
-import com.huan.api.entity.GoodsInfo;
-import com.huan.api.entity.OrderInfo;
+import com.huan.api.entity.*;
+import com.huan.api.exceptions.HttpException;
 import com.huan.api.generate.Order;
 import com.huan.api.rpc.OrderRpcService;
 import com.huan.wxshop.dao.GoodsStockMapper;
 import com.huan.wxshop.entity.GoodsWithNumber;
 import com.huan.wxshop.entity.OrderResponse;
-import com.huan.wxshop.exceptions.HttpException;
 import com.huan.wxshop.generate.Goods;
 import com.huan.wxshop.generate.ShopMapper;
 import com.huan.wxshop.generate.UserMapper;
@@ -44,31 +42,31 @@ public class OrderService {
         this.goodsStockMapper = goodsStockMapper;
     }
 
-    public void sayHello(int i, int j) {//for dubbo test
-        orderRpcService.sayHello(i, j);
+    public String sayHello(int i, int j) {//for dubbo test
+        return orderRpcService.sayHello(i, j);
     }
 
     public OrderResponse createOrder(OrderInfo orderInfo, Long userId) {
-        Map<Long, Goods> goodsIdToGoods = getIdToGoodsMap(orderInfo);
+        Map<Long, Goods> goodsIdToGoods = getIdToGoodsMap(orderInfo.getGoods());
         Order createdOrder = createOrderViaRpc(orderInfo, userId, goodsIdToGoods);
-        return generateOrderResponse(orderInfo, goodsIdToGoods, createdOrder);
+        return generateOrderResponse(orderInfo.getGoods(), goodsIdToGoods, createdOrder);
 
     }
 
-    private OrderResponse generateOrderResponse(OrderInfo orderInfo, Map<Long, Goods> goodsIdToGoods, Order createdOrder) {
+    private OrderResponse generateOrderResponse(List<GoodsInfo> goodsInfo, Map<Long, Goods> goodsIdToGoods, Order createdOrder) {
         OrderResponse orderResponse = new OrderResponse(createdOrder);
         Long shopId = new ArrayList<>(goodsIdToGoods.values()).get(0).getShopId();
         orderResponse.setShop(shopMapper.selectByPrimaryKey(shopId));
         orderResponse.setGoods(
-                orderInfo.getGoods().stream()
+                goodsInfo.stream()
                         .map(goods -> toGoodsWithNumber(goods, goodsIdToGoods))
                         .collect(Collectors.toList())
         );
         return orderResponse;
     }
 
-    private Map<Long, Goods> getIdToGoodsMap(OrderInfo orderInfo) {
-        List<Long> goodsId = orderInfo.getGoods().stream()
+    private Map<Long, Goods> getIdToGoodsMap(List<GoodsInfo> goodsInfo) {
+        List<Long> goodsId = goodsInfo.stream()
                 .map(GoodsInfo::getGoodsId)
                 .collect(Collectors.toList());
         return goodsService.getIdToGoodsMap(goodsId);
@@ -114,4 +112,41 @@ public class OrderService {
     }
 
 
+    public OrderResponse deleteOrder(long orderId, long userId) {
+        RpcOrderGoods rpcOrderGoods = orderRpcService.deleteOrder(orderId, userId);
+        Map<Long, Goods> goodsIdToGoods = getIdToGoodsMap(rpcOrderGoods.getGoods());
+        return generateOrderResponse(rpcOrderGoods.getGoods(), goodsIdToGoods, rpcOrderGoods.getOrder());
+    }
+
+    public PageResponse<OrderResponse> obtainAllOrders(int pageNum, int pageSize, Long userId, DataStatus status) {
+        PageResponse<RpcOrderGoods> rpcPageResponse = orderRpcService.obtainPagedOrders(pageNum, pageSize, userId, status);
+//        List<GoodsInfo> goodsInfos = rpcPageResponse.getData()
+//                .stream()
+//                .map(RpcOrderGoods::getGoods)
+//                .flatMap(List::stream)
+//                .collect(Collectors.toList());
+
+//        Map<Long, Goods> goodsIdToGoods = getIdToGoodsMap(goodsInfos);
+//        List<OrderResponse> orders = rpcPageResponse.getData()
+//                .stream()
+//                .map(order -> generateOrderResponse(goodsInfos, goodsIdToGoods, order.getOrder()))
+//                .collect(Collectors.toList());
+//        return PageResponse.pagedData(pageNum, pageSize, rpcPageResponse.getTotalPage(), orders);
+
+        List<OrderResponse> data = new ArrayList<>();
+        for (RpcOrderGoods rpcOrderGoods : rpcPageResponse.getData()) {
+            List<GoodsInfo> goodsInfos = rpcOrderGoods.getGoods();
+            Map<Long, Goods> idToGoods = getIdToGoodsMap(goodsInfos);
+            data.add(generateOrderResponse(goodsInfos, idToGoods, rpcOrderGoods.getOrder()));
+        }
+        return PageResponse.pagedData(pageNum, pageSize, rpcPageResponse.getTotalPage(), data);
+
+
+    }
+
+    public OrderResponse updateOrder(long orderId, Order order, Long userId) {
+        RpcOrderGoods rpcOrderGoods = orderRpcService.updateOrder(orderId, order, userId);
+        Map<Long, Goods> idToGoodsMap = getIdToGoodsMap(rpcOrderGoods.getGoods());
+        return generateOrderResponse(rpcOrderGoods.getGoods(), idToGoodsMap, rpcOrderGoods.getOrder());
+    }
 }

@@ -2,10 +2,18 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.huan.order.mapper">
-    <insert id="batchInsert" parameterType="GoodsInfo">
-        <foreach collection="list" item="item" index="index" separator=";">
-            INSERT INTO ORDER_GOODS(GOODS_ID, `NUMBER`) VALUES(#{item.goodsId}, #{item.number})
+<mapper namespace="com.huan.order.mapper.MyOrderMapper">
+    <insert id="batchInsert" parameterType="OrderInfo">
+        INSERT INTO ORDER_GOODS(GOODS_ID, ORDER_ID, `NUMBER`)
+        VALUES
+        <foreach collection="goods" item="item" index="index" separator="," close=";">
+            (#{item.goodsId}, #{orderId}, #{item.number})
         </foreach>
     </insert>
+    <select id="queryOrderGoods" parameterType="long" resultType="GoodsInfo">
+        select GOODS_ID as goodsId,
+               NUMBER as number
+        from ORDER_GOODS
+        where Order_ID=#{orderId}
+    </select>
 </mapper>

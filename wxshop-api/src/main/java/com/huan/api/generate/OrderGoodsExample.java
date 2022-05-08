@@ -1,6 +1,5 @@
 package com.huan.api.generate;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -185,6 +184,66 @@ public class OrderGoodsExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrderIdIsNull() {
+            addCriterion("Order_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdIsNotNull() {
+            addCriterion("Order_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdEqualTo(Long value) {
+            addCriterion("Order_ID =", value, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdNotEqualTo(Long value) {
+            addCriterion("Order_ID <>", value, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdGreaterThan(Long value) {
+            addCriterion("Order_ID >", value, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("Order_ID >=", value, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdLessThan(Long value) {
+            addCriterion("Order_ID <", value, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdLessThanOrEqualTo(Long value) {
+            addCriterion("Order_ID <=", value, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdIn(List<Long> values) {
+            addCriterion("Order_ID in", values, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdNotIn(List<Long> values) {
+            addCriterion("Order_ID not in", values, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdBetween(Long value1, Long value2) {
+            addCriterion("Order_ID between", value1, value2, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdNotBetween(Long value1, Long value2) {
+            addCriterion("Order_ID not between", value1, value2, "orderId");
+            return (Criteria) this;
+        }
+
         public Criteria andGoodsIdIsNull() {
             addCriterion("GOODS_ID is null");
             return (Criteria) this;
@@ -255,52 +314,52 @@ public class OrderGoodsExample {
             return (Criteria) this;
         }
 
-        public Criteria andNumberEqualTo(BigDecimal value) {
+        public Criteria andNumberEqualTo(Long value) {
             addCriterion("NUMBER =", value, "number");
             return (Criteria) this;
         }
 
-        public Criteria andNumberNotEqualTo(BigDecimal value) {
+        public Criteria andNumberNotEqualTo(Long value) {
             addCriterion("NUMBER <>", value, "number");
             return (Criteria) this;
         }
 
-        public Criteria andNumberGreaterThan(BigDecimal value) {
+        public Criteria andNumberGreaterThan(Long value) {
             addCriterion("NUMBER >", value, "number");
             return (Criteria) this;
         }
 
-        public Criteria andNumberGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andNumberGreaterThanOrEqualTo(Long value) {
             addCriterion("NUMBER >=", value, "number");
             return (Criteria) this;
         }
 
-        public Criteria andNumberLessThan(BigDecimal value) {
+        public Criteria andNumberLessThan(Long value) {
             addCriterion("NUMBER <", value, "number");
             return (Criteria) this;
         }
 
-        public Criteria andNumberLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andNumberLessThanOrEqualTo(Long value) {
             addCriterion("NUMBER <=", value, "number");
             return (Criteria) this;
         }
 
-        public Criteria andNumberIn(List<BigDecimal> values) {
+        public Criteria andNumberIn(List<Long> values) {
             addCriterion("NUMBER in", values, "number");
             return (Criteria) this;
         }
 
-        public Criteria andNumberNotIn(List<BigDecimal> values) {
+        public Criteria andNumberNotIn(List<Long> values) {
             addCriterion("NUMBER not in", values, "number");
             return (Criteria) this;
         }
 
-        public Criteria andNumberBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andNumberBetween(Long value1, Long value2) {
             addCriterion("NUMBER between", value1, value2, "number");
             return (Criteria) this;
         }
 
-        public Criteria andNumberNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andNumberNotBetween(Long value1, Long value2) {
             addCriterion("NUMBER not between", value1, value2, "number");
             return (Criteria) this;
         }

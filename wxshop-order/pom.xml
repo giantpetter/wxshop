@@ -49,6 +49,17 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -60,6 +71,15 @@
                 </includes>
             </resource>
         </resources>
+        <testResources>
+            <!--测试的时候直接读取src/main/resources的资源文件-->
+            <testResource>
+                <directory>${project.basedir}/src/main/resources</directory>
+            </testResource>
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.flywaydb</groupId>

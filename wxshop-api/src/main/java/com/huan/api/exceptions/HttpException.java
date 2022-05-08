@@ -1,4 +1,4 @@
-package com.huan.wxshop.exceptions;
+package com.huan.api.exceptions;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -80,7 +80,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from ORDER
+    from ORDER_TABLE
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -99,15 +99,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from ORDER
+    from ORDER_TABLE
     where ID = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from ORDER
+    delete from ORDER_TABLE
     where ID = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.huan.api.generate.OrderExample">
-    delete from ORDER
+    delete from ORDER_TABLE
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -116,7 +116,7 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into ORDER (USER_ID, TOTAL_PRICE, ADDRESS, 
+    insert into ORDER_TABLE (USER_ID, TOTAL_PRICE, ADDRESS, 
       EXPRESS_COMPANY, EXPRESS_ID, STATUS, 
       CREATED_AT, UPDATED_AT)
     values (#{userId,jdbcType=BIGINT}, #{totalPrice,jdbcType=DECIMAL}, #{address,jdbcType=VARCHAR}, 
@@ -127,7 +127,7 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into ORDER
+    insert into ORDER_TABLE
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userId != null">
         USER_ID,
@@ -182,13 +182,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.huan.api.generate.OrderExample" resultType="java.lang.Long">
-    select count(*) from ORDER
+    select count(*) from ORDER_TABLE
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update ORDER
+    update ORDER_TABLE
     <set>
       <if test="record.id != null">
         ID = #{record.id,jdbcType=BIGINT},
@@ -223,7 +223,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update ORDER
+    update ORDER_TABLE
     set ID = #{record.id,jdbcType=BIGINT},
       USER_ID = #{record.userId,jdbcType=BIGINT},
       TOTAL_PRICE = #{record.totalPrice,jdbcType=DECIMAL},
@@ -238,7 +238,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.huan.api.generate.Order">
-    update ORDER
+    update ORDER_TABLE
     <set>
       <if test="userId != null">
         USER_ID = #{userId,jdbcType=BIGINT},
@@ -268,7 +268,7 @@
     where ID = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.huan.api.generate.Order">
-    update ORDER
+    update ORDER_TABLE
     set USER_ID = #{userId,jdbcType=BIGINT},
       TOTAL_PRICE = #{totalPrice,jdbcType=DECIMAL},
       ADDRESS = #{address,jdbcType=VARCHAR},

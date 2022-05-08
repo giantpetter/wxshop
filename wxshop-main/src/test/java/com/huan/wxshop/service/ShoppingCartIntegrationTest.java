@@ -3,7 +3,7 @@ package com.huan.wxshop.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.huan.wxshop.WxshopApplication;
 import com.huan.wxshop.controller.ShoppingCartController;
-import com.huan.wxshop.entity.PageResponse;
+import com.huan.api.entity.PageResponse;
 import com.huan.wxshop.entity.Response;
 import com.huan.wxshop.entity.ShoppingCartData;
 import com.huan.wxshop.entity.GoodsWithNumber;

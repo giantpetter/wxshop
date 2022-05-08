@@ -2,8 +2,8 @@ package com.huan.wxshop.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.huan.api.entity.DataStatus;
+import com.huan.api.entity.PageResponse;
 import com.huan.wxshop.WxshopApplication;
-import com.huan.wxshop.entity.PageResponse;
 import com.huan.wxshop.entity.Response;
 import com.huan.wxshop.generate.Goods;
 import com.huan.wxshop.generate.GoodsMapper;
@@ -35,6 +35,7 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void createGoods() throws URISyntaxException, IOException {
+        cookieStore.clear();
         UserLoginResponse loginResponse = loginAndGetCookie();
         Shop shop = new Shop();
         shop.setName("我的微信店铺");
@@ -50,7 +51,7 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
         Assertions.assertEquals(loginResponse.user.getId(), shopInResponse.getData().getOwnerUserId());
 
         Assertions.assertEquals(HttpServletResponse.SC_CREATED, shopResponse.getStatusLine().getStatusCode());
-
+        shopResponse.close();
 
         Goods goods = new Goods();
         goods.setDescription("纯天然无污染肥皂");
@@ -70,6 +71,7 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
         Assertions.assertEquals("ok", goodsInResponse.getData().getStatus());
         Assertions.assertEquals(shopInResponse.getData().getId(), goodsInResponse.getData().getShopId());
 
+
     }
 
     @Test
@@ -82,6 +84,7 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
         goods.setDescription("更新测试404");
         response = doHttpRequest("goods/7", goods, HttpMethod.PATCH.name());
         Assertions.assertEquals(response.getStatusLine().getStatusCode(), HttpStatus.NOT_FOUND.value());
+        response.close();
     }
 
 
@@ -128,6 +131,7 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
         Assertions.assertEquals("details1", data.getData().getDetails());
         Assertions.assertEquals(1L, data.getData().getShopId());
         Assertions.assertEquals(200, data.getData().getStock());
+        response.close();
     }
 
 
@@ -143,6 +147,7 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
         Assertions.assertEquals("details2", data.getData().getDetails());
         Assertions.assertEquals(1L, data.getData().getShopId());
         Assertions.assertEquals("deleted", data.getData().getStatus());
+        response.close();
 
 
     }
@@ -158,6 +163,7 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
         Assertions.assertEquals("desc2", data.getData().getDescription());
         Assertions.assertEquals("details2", data.getData().getDetails());
         Assertions.assertEquals(1L, data.getData().getShopId());
+        response.close();
     }
 
     @Test
@@ -165,6 +171,7 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
         loginAndGetCookie();
         CloseableHttpResponse response = doHttpRequest("goods/12", null, HttpMethod.GET.name());
         Assertions.assertEquals(response.getStatusLine().getStatusCode(), HttpStatus.NOT_FOUND.value());
+        response.close();
     }
 
     @Test

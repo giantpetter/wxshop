@@ -3,8 +3,9 @@
 <mapper namespace="com.huan.order.mapper.OrderGoodsMapper">
   <resultMap id="BaseResultMap" type="com.huan.api.generate.OrderGoods">
     <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="Order_ID" jdbcType="BIGINT" property="orderId" />
     <result column="GOODS_ID" jdbcType="BIGINT" property="goodsId" />
-    <result column="NUMBER" jdbcType="DECIMAL" property="number" />
+    <result column="NUMBER" jdbcType="BIGINT" property="number" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ID, GOODS_ID, NUMBER
+    ID, Order_ID, GOODS_ID, NUMBER
   </sql>
   <select id="selectByExample" parameterType="com.huan.api.generate.OrderGoodsExample" resultMap="BaseResultMap">
     select
@@ -109,8 +110,10 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into ORDER_GOODS (GOODS_ID, NUMBER)
-    values (#{goodsId,jdbcType=BIGINT}, #{number,jdbcType=DECIMAL})
+    insert into ORDER_GOODS (Order_ID, GOODS_ID, NUMBER
+      )
+    values (#{orderId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{number,jdbcType=BIGINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.huan.api.generate.OrderGoods">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -118,6 +121,9 @@
     </selectKey>
     insert into ORDER_GOODS
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        Order_ID,
+      </if>
       <if test="goodsId != null">
         GOODS_ID,
       </if>
@@ -126,11 +132,14 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
       <if test="goodsId != null">
         #{goodsId,jdbcType=BIGINT},
       </if>
       <if test="number != null">
-        #{number,jdbcType=DECIMAL},
+        #{number,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -146,11 +155,14 @@
       <if test="record.id != null">
         ID = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.orderId != null">
+        Order_ID = #{record.orderId,jdbcType=BIGINT},
+      </if>
       <if test="record.goodsId != null">
         GOODS_ID = #{record.goodsId,jdbcType=BIGINT},
       </if>
       <if test="record.number != null">
-        NUMBER = #{record.number,jdbcType=DECIMAL},
+        NUMBER = #{record.number,jdbcType=BIGINT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -160,8 +172,9 @@
   <update id="updateByExample" parameterType="map">
     update ORDER_GOODS
     set ID = #{record.id,jdbcType=BIGINT},
+      Order_ID = #{record.orderId,jdbcType=BIGINT},
       GOODS_ID = #{record.goodsId,jdbcType=BIGINT},
-      NUMBER = #{record.number,jdbcType=DECIMAL}
+      NUMBER = #{record.number,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -169,19 +182,23 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.huan.api.generate.OrderGoods">
     update ORDER_GOODS
     <set>
+      <if test="orderId != null">
+        Order_ID = #{orderId,jdbcType=BIGINT},
+      </if>
       <if test="goodsId != null">
         GOODS_ID = #{goodsId,jdbcType=BIGINT},
       </if>
       <if test="number != null">
-        NUMBER = #{number,jdbcType=DECIMAL},
+        NUMBER = #{number,jdbcType=BIGINT},
       </if>
     </set>
     where ID = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.huan.api.generate.OrderGoods">
     update ORDER_GOODS
-    set GOODS_ID = #{goodsId,jdbcType=BIGINT},
-      NUMBER = #{number,jdbcType=DECIMAL}
+    set Order_ID = #{orderId,jdbcType=BIGINT},
+      GOODS_ID = #{goodsId,jdbcType=BIGINT},
+      NUMBER = #{number,jdbcType=BIGINT}
     where ID = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

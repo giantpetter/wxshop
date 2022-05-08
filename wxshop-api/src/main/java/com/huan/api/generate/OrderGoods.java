@@ -1,14 +1,15 @@
 package com.huan.api.generate;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 public class OrderGoods implements Serializable {
     private Long id;
 
+    private Long orderId;
+
     private Long goodsId;
 
-    private BigDecimal number;
+    private Long number;
 
     private static final long serialVersionUID = 1L;
 
@@ -20,6 +21,14 @@ public class OrderGoods implements Serializable {
         this.id = id;
     }
 
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
     public Long getGoodsId() {
         return goodsId;
     }
@@ -28,11 +37,11 @@ public class OrderGoods implements Serializable {
         this.goodsId = goodsId;
     }
 
-    public BigDecimal getNumber() {
+    public Long getNumber() {
         return number;
     }
 
-    public void setNumber(BigDecimal number) {
+    public void setNumber(Long number) {
         this.number = number;
     }
 }
